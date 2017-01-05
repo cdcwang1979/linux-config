@@ -1,0 +1,14 @@
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+
+auto wlan0
+iface wlan0 inet static
+#wpa-ssid "Speedpro_Manager"
+#wpa-psk "200313008800"
+address "192.168.1.220"
+netmask "255.255.255.0"
+gateway "192.168.1.1"
+

@@ -1,0 +1,124 @@
+petalinux-create --type project --template zynq --name smartCar
+cd smartCar
+petalinux-config --get-hw-description=../hwdef_car
+
+petalinux-config 
+   --Kernel Bootargs
+      console=ttyPS1,115200 earlyprintk maxcpus=1 
+	  《SD卡启动rootfs》
+	  console=ttyPS0,115200 earlyprintk root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4
+-*- Subsystem AUTO Hardware Settings  ---> 
+    Ethernet Settings  ---> 
+	[ ] Obtain IP address automatically
+	    <<设置IP>>
+	[*]   Advanced bootable images storage Settings  ---> 	  
+		dtb image settings  ---> 	
+			image storage media (from boot image)  --->
+	        <<Select SD Card>>
+			
+petalinux-config -c kernel
+[*] Networking support  ---> 
+	-*-   Wireless  ---> 
+		<*>   cfg80211 - wireless configuration API
+		[*]     cfg80211 wireless extensions compatibility 
+		<*>   Generic IEEE 802.11 Networking Stack (mac80211) 
+Device Drivers  ---> 
+	[*] USB support  ---> 
+		<*>     USB Wireless Device Management support 
+	[*] Network device support  --->
+		[*]   Wireless LAN  --->  
+			<*>   Realtek rtlwifi family of devices (NEW)  --->
+				<*>   Realtek RTL8192CU/RTL8188CU USB Wireless Network Adapter    
+	[*] Staging drivers  ---> 
+		<*>   Realtek RTL8188EU Wireless LAN NIC driver
+		
+petalinux-config -c rootfs
+filesystem Packages
+--base
+----tcf-agent
+------[*]tcf-agent
+--console/network
+----dropbear
+------[*]dropbear
+------[*]dropbear-openssh-sftp-server
+----openssh
+------[*]openssh-scp
+------[*]openssh-sftp-server
+--network
+------wpa-supplicant
+--------[*]wpa-supplicant
+--------[*]wpa-supplicant-cli
+--------[*]wpa-supplicant-passphrase
+
+HDMI Support
+petalinux-config -c kernel
+Device Drivers  ---> 
+	[*] DMA Engine support  ---> 
+		-*-   Xilinx AXI VDMA Engine 
+		<*>   Xilinx AXI DMAS Engine 
+    Common Clock Framework  ---> 
+		<*> AXI clkgen driver
+    Graphics support --->
+		<*>   DRM Support for Analog Devices HDMI FPGA platforms	
+		I2C encoder or helper chips  --->		
+			<*> AV7511 encoder
+	<*> Multimedia support  --->
+		Encoders, decoders, sensors and other helper chips  --->	
+			<*> Analog Devices ADV7511 encoder  	
+	I2C Hardware Bus support  --->
+		<*> Cadence I2C Controller
+		<*> Xilinx I2C Controller 
+			
+
+在WIN7/ubuntu的cmd窗口输入下面的命令
+pscp d:/ar0134.ko root@192.168.1.9:/mnt
+输入密码后文件上传
+
+在WIN7/ubuntu的cmd窗口输入下面的命令
+pscp root@192.168.1.9:/mnt/ar0134.ko d:/ 
+输入密码后文件下载
+
+mount -t ext4 /dev/mmcblk0p5 /mnt
+mount -t vfat /dev/mmcblk0p0 /mnt
+
+开启printk、dev_dbg输出
+$PETALINUX/components/linux-kernel/xlnx-4.4/include/linux/printk.h
+将下面的7修改成8
+#define CONSOLE_LOGLEVEL_DEFAULT 7 /* anything MORE serious than KERN_DEBUG */
+同时在需要debug的的程序前头文件定义前加上
+#define   DEBUG  1
+
+linux permission denied解决方法
+chmod 777 test.sh
+此时执行:./test.sh即可成功
+配额他/motodev->mdiv
+
+自动加载SD卡
+$PROJ/build/linux/rootfs/stage/etc/fstab
+
+
+makefile
+$(TARGETINST)的文件在：petalinux安装目录/component/rootfs/targetroot-inst.sh
+
+问题点
+[ERROR] ERROR: smart_install_pkgs: Failed to install pakcages.
+只能重新新建Project
+
+ERROR: Failed to generate initrd, target root dir /mnt/spzynq/CarOS/build/linux/rootfs/targetroot doesn't exist!
+
+
+petalinux-package --image -c rootfs --format initramfs
+
+lib
+   gcc-runtime-xilinx
+
+
+Kernel hacking --->
+
+问题点
+pscp下载时
+sh: /usr/libexec/sftp-server: No such file or directory
+1、启动autologin时就会出现这样的错误，同时tcf也没有启动
+2、IP不正确
+
+HDMI显示出现异常
