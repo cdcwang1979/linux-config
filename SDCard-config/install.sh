@@ -3,5 +3,5 @@ PRJ_DIR=$(cd `dirname $0`; pwd)
 #echo $PRJ_DIR
 echo "=================================="
 source /SDCard-config/wireless/run.sh
-#source /mnt/phoenix/SDCard-config/inittab/run.sh
+source /SDCard-config/inittab/run.sh
 echo "=================================="

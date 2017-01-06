@@ -38,5 +38,6 @@ z6:6:respawn:/sbin/sulogin
 #
 
 
-0:2345:askfirst:-/bin/login
 PS1:2345:respawn:/sbin/getty -L 115200 ttyPS1 vt100
+0:2345:respawn:/bin/login
+

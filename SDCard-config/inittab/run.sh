@@ -1,6 +1,3 @@
-cd inittab/
-cp -f  inittab  				/etc/inittab
-
-cd ../
+cp -f  /SDCard-config/inittab/inittab  				/etc/inittab
 echo "inittab config finished"
 

@@ -17,7 +17,7 @@ stty $SAVEDSTTY
 PRJ_DIR=$(cd `dirname $0`; pwd)
 rootfs="none"
 cd $PRJ_DIR
-SSH_IP="192.168.1.10"
+#SSH_IP="192.168.1.10"
 
 echo "==========================================================="
 echo "1 - build liux "
@@ -123,9 +123,9 @@ if [ "$rootfs" = "initram" ] || [ "$rootfs" = "sd" ]; then
 		rm -rf /media/root/rootfs/*
 		cp -f images/linux/rootfs.cpio /media/root/rootfs/
 		cd /media/root/rootfs
-		sudo pax -rf rootfs.cpio
+		sudo pax -rvf rootfs.cpio
 		mkdir /media/root/rootfs/SDCard-config/
-		cp -rf /mnt/phoenix/SDCard-config/* /media/root/rootfs/SDCard-config/
+		cp -rf /mnt/linux-config/SDCard-config/* /media/root/rootfs/SDCard-config/
 		sleep 2s
 		umount /media/root/rootfs
 	fi
