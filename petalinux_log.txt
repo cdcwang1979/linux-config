@@ -122,3 +122,4 @@ sh: /usr/libexec/sftp-server: No such file or directory
 2、IP不正确
 
 HDMI显示出现异常
+VDMA的AXI只能单独占用
